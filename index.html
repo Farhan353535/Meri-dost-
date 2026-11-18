@@ -1,168 +1,1579 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAHANS CAFY | Pizza, Burgers & Fast Food</title>
-  <script src="https://tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cloudflare.com" />
-  <style>
-    @import url('https://googleapis.com');
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #0b0b0b;
-      color: #ffffff;
-      scroll-behavior: smooth;
-    }
-    .glass-card {
-      background: #161616;
-      border: 1px solid #262626;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">FAHANS CAFY | Hot Pizzas, Juicy Burgers & Fast Food</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Bebas Neue -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Bebas Neue', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0c0c0e',
+                            card: '#16161a',
+                            border: '#26262c',
+                            accent: 'var(--brand-accent, #ff4d00)',
+                            accentHover: 'var(--brand-accent-hover, #e04400)',
+                            gold: '#ffb703',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --brand-accent: #ff4d00;
+            --brand-accent-hover: #e04400;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0c0c0e; }
+        ::-webkit-scrollbar-thumb { background: #26262c; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--brand-accent); }
+    </style>
 </head>
-<body class="antialiased">
+<body class="bg-brand-dark text-gray-100 font-sans antialiased selection:bg-brand-accent selection:text-white">
 
-  <nav class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-zinc-800 px-4 py-3">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-orange-600/30">
-          <i class="fa-solid fa-fire"></i>
+    <!-- ==================== STICKY NAVIGATION BAR ==================== -->
+    <header class="sticky top-0 z-40 bg-brand-dark/95 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-accent to-brand-gold flex items-center justify-center text-black font-bold text-xl shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+                    <div>
+                        <span id="nav-brand-name" class="font-display text-3xl tracking-wider text-white block leading-none">FAHANS CAFY</span>
+                        <span id="nav-brand-tagline" class="text-[11px] uppercase tracking-widest text-brand-gold font-semibold">Pizza • Burgers • Fast Food</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center space-x-7">
+                    <a href="#home" class="text-sm font-medium text-gray-300 hover:text-brand-accent transition-colors">Home</a>
+                    <a href="#menu" class="text-sm font-medium text-gray-300 hover:text-brand-accent transition-colors">Menu</a>
+                    <a href="#deals" class="text-sm font-medium text-gray-300 hover:text-brand-accent transition-colors flex items-center gap-1.5">
+                        Hot Deals <span class="bg-brand-accent text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold animate-pulse">HOT</span>
+                    </a>
+                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-brand-accent transition-colors">Why Us</a>
+                    <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-brand-accent transition-colors">Contact Us</a>
+                </nav>
+
+                <!-- Account, Cart & Mobile Menu Actions -->
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                    <!-- Login / Account Button -->
+                    <button onclick="openAccountModal()" id="nav-account-btn" class="bg-brand-card hover:bg-zinc-800 border border-brand-border text-gray-200 px-3.5 py-2.5 rounded-xl flex items-center gap-2 transition-all text-sm font-medium">
+                        <i class="fa-regular fa-user text-brand-accent"></i>
+                        <span id="nav-user-label" class="max-w-[90px] truncate">Login</span>
+                    </button>
+
+                    <!-- Shopping Cart Button -->
+                    <button onclick="toggleCart()" class="relative bg-brand-card hover:bg-zinc-800 border border-brand-border text-white px-3.5 sm:px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all active:scale-95 shadow-md">
+                        <i class="fa-solid fa-bag-shopping text-brand-gold text-lg"></i>
+                        <span class="hidden sm:inline text-sm font-semibold">Order</span>
+                        <span id="cart-badge" class="bg-brand-accent text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-brand-card border border-brand-border text-gray-300 hover:text-white">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div>
-          <h1 class="font-extrabold text-lg tracking-wide leading-none">FAHANS CAFY</h1>
-          <p class="text-[10px] text-orange-500 font-semibold tracking-widest uppercase">Pizza • Burgers • Fast Food</p>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-card border-b border-brand-border px-4 pt-2 pb-5 space-y-2">
+            <a href="#home" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-200 hover:bg-zinc-800 hover:text-brand-accent">Home</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-200 hover:bg-zinc-800 hover:text-brand-accent">Full Menu</a>
+            <a href="#deals" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-200 hover:bg-zinc-800 hover:text-brand-accent">Hot Deals & Combos</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-200 hover:bg-zinc-800 hover:text-brand-accent">Why Choose Us</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-200 hover:bg-zinc-800 hover:text-brand-accent">Contact Us</a>
+            <button onclick="toggleMobileMenu(); openAccountModal();" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-medium text-brand-gold hover:bg-zinc-800">
+                <i class="fa-regular fa-user mr-2"></i> Customer Account / Orders
+            </button>
         </div>
-      </div>
+    </header>
 
-      <div class="flex items-center gap-3">
-        <button id="authBtn" onclick="openModal('authModal')" class="text-xs sm:text-sm bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-2 rounded-lg font-medium transition flex items-center gap-2">
-          <i class="fa-solid fa-user text-orange-500"></i>
-          <span id="authBtnText">Login</span>
-        </button>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="home" class="relative overflow-hidden pt-10 pb-20 lg:py-24">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-accent/20 rounded-full blur-[128px] -z-10"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-gold/10 rounded-full blur-[128px] -z-10"></div>
 
-        <button id="adminPanelBtn" onclick="openModal('adminModal')" class="hidden text-xs sm:text-sm bg-orange-600/20 border border-orange-500 text-orange-400 px-3 py-2 rounded-lg font-semibold transition">
-          <i class="fa-solid fa-gear"></i> Admin
-        </button>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Text Content -->
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-card border border-brand-border text-brand-gold text-xs sm:text-sm font-semibold">
+                        <i class="fa-solid fa-bolt text-brand-accent"></i>
+                        <span>Welcome to <span class="dynamic-brand-text">FAHANS CAFY</span> • Hot & Fresh Delivery</span>
+                    </div>
 
-        <button onclick="openModal('cartModal')" class="relative bg-orange-600 hover:bg-orange-500 text-white px-3.5 py-2 rounded-lg font-semibold transition flex items-center gap-2">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span id="cartCount" class="bg-black text-orange-400 text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
-        </button>
-      </div>
+                    <h1 class="font-display text-5xl sm:text-7xl lg:text-8xl tracking-wide text-white leading-[0.95]">
+                        HOT, FRESH & <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-gold">LOADED WITH FLAVOR</span>
+                    </h1>
+
+                    <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Craving cheesy wood-fired pizzas, crispy double zinger burgers, or saucy loaded fries? <strong class="text-white dynamic-brand-text">FAHANS CAFY</strong> serves 100% Halal, freshly prepared fast food straight to your doorstep.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span>Explore Menu</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a id="hero-wa-link" href="https://wa.me/923026120262?text=Assalam-o-Alaikum%20FAHANS%20CAFY!%20Mujhe%20order%20karna%20hai." target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 border border-green-500/40 text-green-400 font-semibold text-base transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                            <span class="dynamic-phone-text">0302-6120262</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Trust Stats -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-brand-border max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <p class="font-display text-3xl text-white">100%</p>
+                            <p class="text-xs text-gray-400">Fresh & Halal</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-3xl text-brand-gold">4.9 ★</p>
+                            <p class="text-xs text-gray-400">Customer Rating</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-3xl text-brand-accent">30 MIN</p>
+                            <p class="text-xs text-gray-400">Express Delivery</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Food Showcase -->
+                <div class="lg:col-span-6 relative">
+                    <div class="relative rounded-3xl overflow-hidden border-2 border-brand-border shadow-2xl shadow-black/80 group">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80" 
+                             onerror="this.src='https://placehold.co/800x600/16161a/ff4d00?text=FAHANS+CAFY+Special+Pizza'"
+                             alt="Special Cheesy Pizza" 
+                             class="w-full h-[360px] sm:h-[460px] object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                        
+                        <div class="absolute bottom-5 left-5 right-5 sm:right-auto bg-brand-dark/90 backdrop-blur-md border border-brand-border p-4 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-brand-gold/20 text-brand-gold flex items-center justify-center text-2xl shrink-0">
+                                <i class="fa-solid fa-pizza-slice"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brand-accent"><span class="dynamic-brand-text">FAHANS CAFY</span> Special</span>
+                                <h3 class="text-white font-bold text-base">Crown Crust Tikka Pizza</h3>
+                                <p class="text-xs text-gray-400">Stuffed cheesy crust • Starting Rs. 799</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== HOT DEALS BANNER ==================== -->
+    <section id="deals" class="py-12 bg-gradient-to-r from-brand-accent/15 via-brand-card to-brand-gold/10 border-y border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                <div>
+                    <span class="text-brand-accent font-bold text-xs uppercase tracking-widest">Limited Time Combos</span>
+                    <h2 class="font-display text-4xl sm:text-5xl text-white mt-1"><span class="dynamic-brand-text">FAHANS CAFY</span> MEGA DEALS</h2>
+                </div>
+                <div class="flex items-center gap-3 bg-brand-dark border border-brand-border px-4 py-2.5 rounded-xl">
+                    <i class="fa-regular fa-clock text-brand-gold"></i>
+                    <span class="text-xs sm:text-sm text-gray-300">Free Delivery on orders above <strong class="text-brand-gold">Rs. <span id="display-free-threshold">2,000</span></strong></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Deal 1 -->
+                <div class="bg-brand-dark border border-brand-border hover:border-brand-accent rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-brand-accent/20 text-brand-accent text-xs font-bold px-3 py-1 rounded-full">SAVE RS. 450</span>
+                            <span class="font-display text-3xl text-brand-gold">RS. 999</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-brand-accent transition-colors">Midnight Zinger Duo</h3>
+                        <p class="text-sm text-gray-400 mt-2">2 Crispy Zinger Crunch Burgers + 1 Regular Masala Fries + 2 Cold Drinks (345ml).</p>
+                    </div>
+                    <button onclick="addQuickDeal('Midnight Zinger Duo', 999, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80')" 
+                            class="mt-6 w-full py-3 rounded-xl bg-zinc-800 hover:bg-brand-accent text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Add Deal to Order
+                    </button>
+                </div>
+
+                <!-- Deal 2 -->
+                <div class="bg-brand-dark border-2 border-brand-gold/60 rounded-2xl p-6 flex flex-col justify-between relative shadow-lg shadow-brand-gold/5">
+                    <div class="absolute -top-3 right-6 bg-brand-gold text-black text-[11px] font-extrabold px-3 py-0.5 rounded-full uppercase tracking-wider">
+                        Most Popular
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-brand-gold/20 text-brand-gold text-xs font-bold px-3 py-1 rounded-full">SAVE RS. 800</span>
+                            <span class="font-display text-3xl text-brand-gold">RS. 2,499</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Family Pizza & Burger Feast</h3>
+                        <p class="text-sm text-gray-400 mt-2">1 Large Chicken Tikka Pizza + 2 Zinger Burgers + 1 Loaded Fries + 1.5L Drink.</p>
+                    </div>
+                    <button onclick="addQuickDeal('Family Pizza & Burger Feast', 2499, 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80')" 
+                            class="mt-6 w-full py-3 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-plus"></i> Add Feast to Order
+                    </button>
+                </div>
+
+                <!-- Deal 3 -->
+                <div class="bg-brand-dark border border-brand-border hover:border-brand-accent rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-brand-accent/20 text-brand-accent text-xs font-bold px-3 py-1 rounded-full">SAVE RS. 350</span>
+                            <span class="font-display text-3xl text-brand-gold">RS. 1,599</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-brand-accent transition-colors">Double Pizza Mania</h3>
+                        <p class="text-sm text-gray-400 mt-2">2 Medium Pizzas (Choose any flavor: Tikka, Fajita, or Hot & Spicy) + Garlic Dip.</p>
+                    </div>
+                    <button onclick="addQuickDeal('Double Pizza Mania (2 Med)', 1599, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80')" 
+                            class="mt-6 w-full py-3 rounded-xl bg-zinc-800 hover:bg-brand-accent text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Add Deal to Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE MENU SECTION ==================== -->
+    <section id="menu" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-brand-accent font-bold text-xs uppercase tracking-widest">Freshly Made To Order</span>
+                <h2 class="font-display text-5xl sm:text-6xl text-white mt-2">EXPLORE OUR MENU</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-2">Select your favorite pizza size, juicy burger, or loaded fries and add them to your order.</p>
+            </div>
+
+            <!-- Search & Category Filter Tabs -->
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
+                <div id="category-tabs" class="flex flex-wrap justify-center gap-2">
+                    <button onclick="filterMenu('all')" data-category="all" class="cat-btn active px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-accent text-white transition-all">
+                        All Items
+                    </button>
+                    <button onclick="filterMenu('pizza')" data-category="pizza" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-card text-gray-300 hover:bg-zinc-800 border border-brand-border transition-all">
+                        🍕 Pizzas
+                    </button>
+                    <button onclick="filterMenu('burger')" data-category="burger" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-card text-gray-300 hover:bg-zinc-800 border border-brand-border transition-all">
+                        🍔 Burgers
+                    </button>
+                    <button onclick="filterMenu('sides')" data-category="sides" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-card text-gray-300 hover:bg-zinc-800 border border-brand-border transition-all">
+                        🍟 Fries & Sides
+                    </button>
+                    <button onclick="filterMenu('drinks')" data-category="drinks" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-card text-gray-300 hover:bg-zinc-800 border border-brand-border transition-all">
+                        🥤 Drinks
+                    </button>
+                </div>
+
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input type="text" id="menu-search" onkeyup="renderMenu()" placeholder="Search pizza, zinger, fries..." 
+                           class="w-full bg-brand-card border border-brand-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-accent">
+                </div>
+            </div>
+
+            <!-- Menu Cards Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"></div>
+        </div>
+    </section>
+
+    <!-- ==================== WHY CHOOSE US SECTION ==================== -->
+    <section id="about" class="py-16 bg-brand-card/50 border-y border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-brand-dark border border-brand-border p-7 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-brand-accent/15 text-brand-accent flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-cheese"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">100% Pure Mozzarella</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">We never compromise on cheese. Every <span class="dynamic-brand-text">FAHANS CAFY</span> pizza is loaded with rich, stretchy mozzarella and signature sauces.</p>
+                </div>
+                <div class="bg-brand-dark border border-brand-border p-7 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/15 text-brand-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-drumstick-bite"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Fresh Halal Chicken & Beef</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Marinated daily with authentic spices and crispy coatings for maximum crunch in every single bite.</p>
+                </div>
+                <div class="bg-brand-dark border border-brand-border p-7 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-green-500/15 text-green-400 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Piping Hot Delivery</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Insulated thermal delivery bags ensure your pizza arrives hot and your fries stay crispy right at your doorstep.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT US & INQUIRY FORM SECTION ==================== -->
+    <section id="contact" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                <!-- Left Column: Store Info & Direct WhatsApp -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <span class="text-brand-accent font-bold text-xs uppercase tracking-widest">Get In Touch</span>
+                        <h2 class="font-display text-4xl sm:text-5xl text-white mt-1">CONTACT <span class="dynamic-brand-text">FAHANS CAFY</span></h2>
+                        <p class="text-gray-400 text-sm sm:text-base mt-2">Have a question, bulk party order, or feedback? Reach out directly via WhatsApp or fill out our contact form.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 bg-brand-card border border-brand-border p-4 rounded-2xl">
+                            <div class="w-10 h-10 rounded-xl bg-brand-accent/20 text-brand-accent flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Our Location</h4>
+                                <p id="display-store-address" class="text-gray-400 text-sm mt-0.5">Main Food Street, Near City Center, Pakistan</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 bg-brand-card border border-brand-border p-4 rounded-2xl">
+                            <div class="w-10 h-10 rounded-xl bg-brand-gold/20 text-brand-gold flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Opening Hours</h4>
+                                <p class="text-gray-400 text-sm mt-0.5">Monday – Sunday: <span class="text-white font-semibold">12:00 PM – 3:00 AM</span></p>
+                            </div>
+                        </div>
+
+                        <a id="contact-wa-card" href="https://wa.me/923026120262?text=Assalam-o-Alaikum%20FAHANS%20CAFY!" target="_blank" class="flex items-center justify-between gap-4 bg-green-600/15 hover:bg-green-600/25 border border-green-500/40 p-4 rounded-2xl transition-all group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">WhatsApp & Call Helpline</h4>
+                                    <p class="text-green-400 text-base font-bold mt-0.5 dynamic-phone-text">0302-6120262</p>
+                                </div>
+                            </div>
+                            <span class="px-3.5 py-2 rounded-xl bg-green-600 text-white text-xs font-bold group-hover:scale-105 transition-transform">
+                                Chat Now
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Working Contact Form -->
+                <div class="lg:col-span-7 bg-brand-card border border-brand-border rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <h3 class="font-display text-3xl text-white mb-1">SEND US A MESSAGE</h3>
+                    <p class="text-gray-400 text-sm mb-6">Fill in your details below and we will respond promptly.</p>
+
+                    <form id="contact-form" onsubmit="submitContactForm(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5 font-medium">Your Name *</label>
+                                <input type="text" id="contact-name" required placeholder="e.g. Muhammad Usman" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5 font-medium">Phone / WhatsApp Number *</label>
+                                <input type="tel" id="contact-phone" required placeholder="e.g. 0300-1234567" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5 font-medium">Subject</label>
+                            <select id="contact-subject" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent">
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Catering / Party Deal">Catering / Bulk Party Order</option>
+                                <option value="Order Feedback">Order Feedback / Review</option>
+                                <option value="Complaint / Support">Customer Support</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5 font-medium">Message *</label>
+                            <textarea id="contact-message" rows="4" required placeholder="Write your message or inquiry here..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent"></textarea>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button type="submit" class="flex-1 py-3.5 px-6 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Submit Message</span>
+                            </button>
+                            <button type="button" onclick="sendContactViaWhatsApp()" class="flex-1 py-3.5 px-6 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>Send via WhatsApp</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-black border-t border-brand-border py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-fire-flame-curved text-brand-accent text-xl"></i>
+                <span class="font-display text-2xl text-white tracking-wider dynamic-brand-text">FAHANS CAFY</span>
+            </div>
+            <p class="text-gray-500 text-xs text-center sm:text-left">© 2026 <span class="dynamic-brand-text">FAHANS CAFY</span>. All Rights Reserved. Helpline: <span class="dynamic-phone-text">0302-6120262</span></p>
+            <div class="flex items-center gap-4 text-gray-400">
+                <button onclick="openCustomizerAuth()" class="text-xs text-gray-500 hover:text-brand-gold transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-sliders"></i> Store Owner Panel
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== FLOATING ACTION BUTTONS ==================== -->
+    <!-- Floating Customize Store Button (Bottom Left) -->
+    <button onclick="openCustomizerAuth()" class="fixed bottom-5 left-5 z-40 bg-brand-card hover:bg-zinc-800 border border-brand-border text-gray-200 px-4 py-3 rounded-full shadow-2xl flex items-center gap-2 text-xs font-bold transition-all hover:border-brand-gold group">
+        <i class="fa-solid fa-wand-magic-sparkles text-brand-gold group-hover:rotate-12 transition-transform"></i>
+        <span>Customize Store</span>
+    </button>
+
+    <!-- Floating WhatsApp Quick Order Button (Bottom Right) -->
+    <a id="floating-wa-btn" href="https://wa.me/923026120262?text=Assalam-o-Alaikum%20FAHANS%20CAFY!%20Mujhe%20menu%20se%20order%20karna%20hai." target="_blank" 
+       class="fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-2xl shadow-green-600/40 hover:scale-110 transition-transform"
+       title="Order on WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- ==================== CUSTOMER LOGIN / SIGN UP / PROFILE MODAL ==================== -->
+    <div id="account-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brand-card border border-brand-border rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAccountModal()" class="absolute top-5 right-5 w-9 h-9 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-gray-300 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Logged Out View (Login / Sign Up Tabs) -->
+            <div id="auth-forms-view">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent/20 text-brand-accent flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-user-lock"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-3xl text-white leading-none">CUSTOMER ACCOUNT</h3>
+                        <p class="text-xs text-gray-400">Save address & track your past orders</p>
+                    </div>
+                </div>
+
+                <!-- Tab Switcher -->
+                <div class="grid grid-cols-2 gap-2 bg-brand-dark p-1.5 rounded-xl border border-brand-border mb-6">
+                    <button onclick="switchAuthTab('login')" id="tab-login-btn" class="py-2 rounded-lg text-sm font-bold bg-brand-accent text-white transition-all">Login</button>
+                    <button onclick="switchAuthTab('signup')" id="tab-signup-btn" class="py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition-all">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Phone Number or Email *</label>
+                        <input type="text" id="login-identifier" required placeholder="e.g. 0300-1234567" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Password *</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-sm transition-all">
+                        Login to Account
+                    </button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signup-form" onsubmit="handleSignup(event)" class="space-y-3.5 hidden">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Full Name *</label>
+                        <input type="text" id="signup-name" required placeholder="e.g. Hamza Tariq" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Phone Number *</label>
+                            <input type="tel" id="signup-phone" required placeholder="0300-1234567" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Email (Optional)</label>
+                            <input type="email" id="signup-email" placeholder="hamza@email.com" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Default Delivery Address *</label>
+                        <input type="text" id="signup-address" required placeholder="House #, Street, Area..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Create Password *</label>
+                        <input type="password" id="signup-password" required placeholder="Minimum 4 characters" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-sm transition-all">
+                        Create Free Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logged In Profile & Order History View -->
+            <div id="user-profile-view" class="hidden space-y-5">
+                <div class="flex items-center gap-3.5 pb-4 border-b border-brand-border">
+                    <div class="w-12 h-12 rounded-full bg-brand-accent text-white font-display text-2xl flex items-center justify-center" id="profile-avatar">U</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white" id="profile-name">User Name</h3>
+                        <p class="text-xs text-gray-400" id="profile-phone">0300-0000000</p>
+                    </div>
+                </div>
+
+                <div class="bg-brand-dark border border-brand-border p-3.5 rounded-xl text-xs space-y-1">
+                    <span class="text-gray-400 block">Saved Delivery Address:</span>
+                    <p class="text-white font-medium" id="profile-address">Address here</p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-brand-gold mb-2.5">My Order History</h4>
+                    <div id="order-history-list" class="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                        <!-- Past orders injected here -->
+                    </div>
+                </div>
+
+                <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-red-600/20 hover:bg-red-600/30 border border-red-500/40 text-red-400 font-semibold text-sm transition-all">
+                    <i class="fa-solid fa-right-from-bracket mr-1.5"></i> Logout
+                </button>
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <header class="relative overflow-hidden py-14 px-4 text-center border-b border-zinc-900">
-    <div class="max-w-3xl mx-auto">
-      <span class="inline-flex items-center gap-2 bg-orange-600/15 border border-orange-500/30 text-orange-400 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-5">
-        <i class="fa-solid fa-bolt"></i> Welcome to FAHANS CAFY
-      </span>
-      <h2 class="text-4xl sm:text-6xl font-extrabold uppercase leading-tight tracking-tight mb-5">
-        HOT, FRESH & <span class="text-orange-500 block">LOADED WITH FLAVOR</span>
-      </h2>
-      <p class="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
-        Craving cheesy wood-fired pizzas, crispy double zinger burgers, or saucy loaded fries? 
-        <strong class="text-white">FAHANS CAFY</strong> serves 100% Halal, freshly prepared fast food straight to your doorstep.
-      </p>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-        <a href="#menu" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2">
-          Explore Menu <i class="fa-solid fa-arrow-right"></i>
-        </a>
-        <a href="https://wa.me" target="_blank" class="w-full bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-600/50 text-emerald-400 font-bold py-3.5 px-6 rounded-xl transition flex items-center justify-center gap-2">
-          <i class="fa-brands fa-whatsapp text-lg"></i> 0302-6120262
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <section id="menu" class="max-w-6xl mx-auto px-4 py-12">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-      <div>
-        <h3 class="text-2xl sm:text-3xl font-extrabold">Our Popular <span class="text-orange-500">Menu</span></h3>
-        <p class="text-zinc-400 text-xs sm:text-sm">Select your favorite meal and order instantly on WhatsApp</p>
-      </div>
-
-      <div class="flex flex-wrap gap-2" id="categoryFilters">
-        <button onclick="filterMenu('All')" class="filter-btn active bg-orange-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold">All</button>
-        <button onclick="filterMenu('Burgers')" class="filter-btn bg-zinc-800 text-zinc-300 px-4 py-1.5 rounded-lg text-xs font-semibold">Burgers</button>
-        <button onclick="filterMenu('Pizza')" class="filter-btn bg-zinc-800 text-zinc-300 px-4 py-1.5 rounded-lg text-xs font-semibold">Pizza</button>
-        <button onclick="filterMenu('Fries')" class="filter-btn bg-zinc-800 text-zinc-300 px-4 py-1.5 rounded-lg text-xs font-semibold">Loaded Fries</button>
-      </div>
+    <!-- ==================== OWNER STORE CUSTOMIZER (NO-CODE ADMIN DRAWER) ==================== -->
+    <!-- PIN Verification Modal -->
+    <div id="pin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brand-card border border-brand-border rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+            <div class="w-12 h-12 rounded-2xl bg-brand-gold/20 text-brand-gold flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <h3 class="font-display text-3xl text-white">STORE OWNER ACCESS</h3>
+            <p class="text-xs text-gray-400">Enter Owner PIN to customize brand name, theme colors, WhatsApp number, and menu items. <br><span class="text-brand-gold font-semibold">(Default PIN: 1234)</span></p>
+            <input type="password" id="owner-pin-input" maxlength="6" placeholder="Enter PIN (1234)" class="w-full text-center tracking-widest text-lg font-bold bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold">
+            <div class="flex gap-2">
+                <button onclick="closePinModal()" class="flex-1 py-2.5 rounded-xl bg-zinc-800 text-gray-300 text-sm font-semibold">Cancel</button>
+                <button onclick="verifyOwnerPin()" class="flex-1 py-2.5 rounded-xl bg-brand-gold text-black text-sm font-bold">Unlock</button>
+            </div>
+        </div>
     </div>
 
-    <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </section>
+    <!-- Customizer Slide-Over Panel -->
+    <div id="customizer-overlay" onclick="closeCustomizer()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden"></div>
+    <aside id="customizer-drawer" class="fixed top-0 left-0 h-full w-full sm:w-[440px] bg-brand-card border-r border-brand-border z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-brand-border flex items-center justify-between bg-brand-dark">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-brand-gold"></i>
+                <h3 class="font-display text-2xl text-white tracking-wide">LIVE STORE CUSTOMIZER</h3>
+            </div>
+            <button onclick="closeCustomizer()" class="w-9 h-9 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-gray-300 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-  <footer class="border-t border-zinc-900 py-8 px-4 text-center text-zinc-500 text-xs">
-    <p class="font-bold text-white text-sm mb-1">FAHANS CAFY</p>
-    <p>100% Halal Fast Food • Delivery & Takeaway</p>
-    <p class="mt-2">Order Hotline: <span class="text-orange-500 font-semibold">0302-6120262</span></p>
-  </footer>
+        <div class="flex-1 overflow-y-auto p-5 space-y-6">
+            <!-- 1. Theme Color Picker -->
+            <div class="space-y-2.5">
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-gold">1. Theme Accent Color</label>
+                <div class="grid grid-cols-5 gap-2">
+                    <button onclick="setThemeColor('#ff4d00', '#e04400')" class="h-10 rounded-xl bg-[#ff4d00] border-2 border-white/40 hover:scale-105 transition-transform" title="Flame Orange"></button>
+                    <button onclick="setThemeColor('#dc2626', '#b91c1c')" class="h-10 rounded-xl bg-[#dc2626] border-2 border-white/40 hover:scale-105 transition-transform" title="Crimson Red"></button>
+                    <button onclick="setThemeColor('#10b981', '#059669')" class="h-10 rounded-xl bg-[#10b981] border-2 border-white/40 hover:scale-105 transition-transform" title="Emerald Green"></button>
+                    <button onclick="setThemeColor('#eab308', '#ca8a04')" class="h-10 rounded-xl bg-[#eab308] border-2 border-white/40 hover:scale-105 transition-transform" title="Royal Gold"></button>
+                    <button onclick="setThemeColor('#3b82f6', '#2563eb')" class="h-10 rounded-xl bg-[#3b82f6] border-2 border-white/40 hover:scale-105 transition-transform" title="Electric Blue"></button>
+                </div>
+            </div>
 
-  <a href="https://wa.me" target="_blank" class="fixed bottom-5 right-5 z-30 bg-emerald-500 hover:bg-emerald-400 text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-xl shadow-emerald-500/30 transition">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+            <!-- 2. Business Settings -->
+            <div class="space-y-3 border-t border-brand-border pt-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-gold">2. Store Info & WhatsApp</label>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Restaurant Name</label>
+                    <input type="text" id="cfg-brand-name" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Tagline</label>
+                    <input type="text" id="cfg-tagline" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">WhatsApp (923...)</label>
+                        <input type="text" id="cfg-whatsapp" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Display Phone</label>
+                        <input type="text" id="cfg-display-phone" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Delivery Fee (Rs.)</label>
+                        <input type="number" id="cfg-delivery-fee" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Free Delivery Above</label>
+                        <input type="number" id="cfg-free-above" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Store Address</label>
+                    <input type="text" id="cfg-address" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <button onclick="saveStoreSettings()" class="w-full py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-xs">
+                    Save & Apply Store Info
+                </button>
+            </div>
 
-  <div id="cartModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-md rounded-2xl p-5 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-        <h4 class="font-bold text-lg"><i class="fa-solid fa-bag-shopping text-orange-500 mr-2"></i>Your Cart</h4>
-        <button onclick="closeModal('cartModal')" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-      </div>
+            <!-- 3. Add New Menu Item -->
+            <div class="space-y-3 border-t border-brand-border pt-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-gold">3. Add New Menu Item</label>
+                <input type="text" id="new-item-name" placeholder="Item Name (e.g. Malai Boti Pizza)" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                <div class="grid grid-cols-2 gap-2.5">
+                    <select id="new-item-cat" class="bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                        <option value="pizza">Pizza</option>
+                        <option value="burger">Burger</option>
+                        <option value="sides">Fries & Sides</option>
+                        <option value="drinks">Drinks</option>
+                    </select>
+                    <input type="number" id="new-item-price" placeholder="Price (Rs.)" class="bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <input type="text" id="new-item-desc" placeholder="Short description..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white">
+                <button onclick="addNewMenuItem()" class="w-full py-2.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-xs">
+                    + Add Item to Menu
+                </button>
+            </div>
 
-      <div id="cartItemsContainer" class="space-y-3 mb-4"></div>
+            <!-- 4. Manage / Delete Existing Items -->
+            <div class="space-y-2 border-t border-brand-border pt-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-gold">4. Manage Menu Items</label>
+                <div id="admin-menu-list" class="space-y-2 max-h-44 overflow-y-auto pr-1"></div>
+            </div>
 
-      <div class="border-t border-zinc-800 pt-3 mb-4 flex justify-between items-center font-bold text-base">
-        <span>Total Bill:</span>
-        <span id="cartTotal" class="text-orange-500 text-xl">Rs. 0</span>
-      </div>
+            <!-- 5. Export for GitHub / Reset -->
+            <div class="space-y-2 border-t border-brand-border pt-4 pb-4">
+                <button onclick="downloadStandaloneHTML()" class="w-full py-3 rounded-xl bg-brand-gold text-black font-bold text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i> Download Updated index.html (For GitHub)
+                </button>
+                <button onclick="resetAllStoreData()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-red-900/40 text-gray-400 hover:text-red-300 text-xs font-semibold">
+                    Reset Store to Default
+                </button>
+            </div>
+        </div>
+    </aside>
 
-      <div id="checkoutForm" class="space-y-3 border-t border-zinc-800 pt-4">
-        <p class="text-xs font-semibold text-zinc-400 uppercase">Delivery Information</p>
-        <input type="text" id="custName" placeholder="Your Full Name" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500" />
-        <input type="tel" id="custPhone" placeholder="Phone Number (e.g. 0300-1234567)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500" />
-        <textarea id="custAddress" rows="2" placeholder="Complete Delivery Address" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500"></textarea>
-        
-        <button onclick="placeOrderWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-          <i class="fa-brands fa-whatsapp text-lg"></i> Confirm Order on WhatsApp
-        </button>
-      </div>
+    <!-- ==================== SLIDE-OUT SHOPPING CART DRAWER ==================== -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+
+    <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[440px] bg-brand-card border-l border-brand-border z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-brand-border flex items-center justify-between bg-brand-dark">
+            <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-bag-shopping text-brand-accent text-xl"></i>
+                <h3 class="font-display text-2xl tracking-wide text-white"><span class="dynamic-brand-text">FAHANS CAFY</span> ORDER</h3>
+            </div>
+            <button onclick="toggleCart()" class="w-9 h-9 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-gray-300 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Free Delivery Progress Bar -->
+        <div class="bg-brand-dark/80 px-5 py-2.5 border-b border-brand-border">
+            <p id="free-delivery-status" class="text-xs text-gray-300 mb-1.5">Add items worth Rs. 2,000 for <span class="text-brand-gold font-bold">FREE Delivery!</span></p>
+            <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div id="free-delivery-bar" class="h-full bg-brand-gold transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-5 space-y-6">
+            <div id="empty-cart-msg" class="text-center py-12 space-y-3">
+                <div class="w-16 h-16 rounded-full bg-zinc-800 text-gray-500 flex items-center justify-center mx-auto text-2xl">
+                    <i class="fa-solid fa-burger"></i>
+                </div>
+                <h4 class="text-white font-bold">Your cart is empty!</h4>
+                <p class="text-gray-400 text-sm">Add hot pizzas, zinger burgers, or loaded fries from <span class="dynamic-brand-text">FAHANS CAFY</span>.</p>
+                <button onclick="toggleCart()" class="mt-2 px-5 py-2.5 rounded-xl bg-brand-accent text-white text-sm font-semibold">
+                    Browse Menu
+                </button>
+            </div>
+
+            <div id="cart-items-container" class="space-y-3 hidden"></div>
+
+            <!-- Checkout Form -->
+            <div id="checkout-form-section" class="hidden border-t border-brand-border pt-5 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-brand-gold flex items-center gap-2">
+                        <i class="fa-solid fa-truck-fast"></i> Delivery Details
+                    </h4>
+                    <button onclick="toggleCart(); openAccountModal();" id="cart-login-hint" class="text-xs text-brand-accent hover:underline">
+                        Login to auto-fill
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Full Name *</label>
+                    <input type="text" id="cust-name" placeholder="e.g. Ali Raza" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Phone / WhatsApp Number *</label>
+                    <input type="tel" id="cust-phone" placeholder="e.g. 0300-1234567" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Complete Delivery Address *</label>
+                    <textarea id="cust-address" rows="2" placeholder="House #, Street #, Block / Area..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Payment Method</label>
+                    <select id="cust-payment" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-accent">
+                        <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                        <option value="JazzCash Transfer">JazzCash Transfer</option>
+                        <option value="EasyPaisa Transfer">EasyPaisa Transfer</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="cart-footer" class="hidden p-5 bg-brand-dark border-t border-brand-border space-y-4">
+            <div class="space-y-1.5 text-sm">
+                <div class="flex justify-between text-gray-400">
+                    <span>Subtotal</span>
+                    <span id="bill-subtotal">Rs. 0</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Delivery Fee</span>
+                    <span id="bill-delivery">Rs. 150</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-brand-border">
+                    <span>Total Payable</span>
+                    <span id="bill-total" class="text-brand-gold text-lg">Rs. 0</span>
+                </div>
+            </div>
+
+            <button onclick="placeWhatsAppOrder()" class="w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-green-600/20 transition-all active:scale-95">
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                <span>Send Order on WhatsApp</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==================== TOAST & CONFIRMATION MODALS ==================== -->
+    <div id="toast-box" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-zinc-900 border border-brand-accent text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+            <i class="fa-solid fa-circle-check text-brand-gold"></i>
+            <span id="toast-message" class="text-sm font-medium">Notification</span>
+        </div>
     </div>
-  </div>
 
-  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-sm rounded-2xl p-6">
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-        <h4 id="authTitle" class="font-bold text-lg">Account Login</h4>
-        <button onclick="closeModal('authModal')" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-      </div>
+    <div id="generic-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brand-card border border-brand-border rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="modal-title" class="font-display text-3xl text-white">SUCCESS!</h3>
+            <p id="modal-body" class="text-gray-400 text-sm">Action completed successfully.</p>
+            <button onclick="closeGenericModal()" class="w-full py-3 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-bold text-sm">
+                Done
+            </button>
+        </div>
+    </div>
 
-      <div id="loggedInView" class="hidden text-center space-y-4">
-        <div class="w-16 h-16 bg-orange-600/20 text-orange-500 rounded-full flex items-center justify-center text-2xl mx-auto">
-          <i class="fa-solid fa-user-check"></i>
-        </div>
-        <div>
-          <p class="text-sm text-zinc-400">Logged in as</p>
-          <p id="loggedUserEmail" class="font-bold text-white"></p>
-        </div>
-        <button onclick="logoutUser()" class="w-full bg-red-600/20 border border-red-600 text-red-400 font-semibold py-2.5 rounded-xl">
-          Logout
-        </button>
-      </div>
+    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+    <script>
+        // Default Store Configuration
+        const DEFAULT_CONFIG = {
+            brandName: "FAHANS CAFY",
+            tagline: "Pizza • Burgers • Fast Food",
+            whatsappNumber: "923026120262",
+            displayPhone: "0302-6120262",
+            deliveryFee: 150,
+            freeDeliveryAbove: 2000,
+            address: "Main Food Street, Near City Center, Pakistan",
+            accentColor: "#ff4d00",
+            accentHover: "#e04400"
+        };
 
-      <div id="authFormView" class="space-y-3">
-        <div id="signupNameDiv" class="hidden">
-          <label class="text-xs text-zinc-400">Full Name</label>
-          <input type="text" id="authName" placeholder="Enter your name" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm mt-1" />
-        </div>
-        <div>
-          <label class="text-xs text-zinc-400">Email Address</label>
-          <input type="email" id="authEmail" placeholder="example@gmail.com" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm mt-1" />
-        </div>
-        <div>
-          <label class="text-xs text-zinc-400">Password</label>
-          <input type="password" id="authPass" placeholder="••••••••" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm mt-1" />
-        </div>
+        // Default Menu Items
+        const DEFAULT_MENU = [
+            {
+                id: 1,
+                name: "Chicken Tikka Supreme Pizza",
+                category: "pizza",
+                description: "Smoky spicy chicken tikka chunks, onions, jalapeños, and loaded mozzarella cheese.",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80",
+                badge: "Bestseller",
+                hasSizes: true,
+                prices: { Small: 650, Medium: 1150, Large: 1599 }
+            },
+            {
+                id: 2,
+                name: "Crown Crust Special Pizza",
+                category: "pizza",
+                description: "Cheese-stuffed crown crust loaded with seekh kabab pieces, olives, mushrooms & creamy sauce.",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
+                badge: "Chef's Choice",
+                hasSizes: true,
+                prices: { Small: 799, Medium: 1350, Large: 1850 }
+            },
+            {
+                id: 3,
+                name: "Chicken Fajita Sensation",
+                category: "pizza",
+                description: "Marinated fajita chicken, capsicum, sweet corn, oregano & double mozzarella.",
+                image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=700&q=80",
+                badge: "",
+                hasSizes: true,
+                prices: { Small: 650, Medium: 1150, Large: 1599 }
+            },
+            {
+                id: 4,
+                name: "Zinger Crunch Burger",
+                category: "burger",
+                description: "Extra crispy golden fried chicken thigh fillet, iceberg lettuce, and signature fiery mayo.",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80",
+                badge: "Hot Selling",
+                hasSizes: false,
+                price: 450
+            },
+            {
+                id: 5,
+                name: "Double Decker Smash Beef",
+                category: "burger",
+                description: "Two juicy grilled beef patties, melted cheddar cheese slices, caramelized onions & smoky BBQ sauce.",
+                image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=700&q=80",
+                badge: "Juicy",
+                hasSizes: false,
+                price: 680
+            },
+            {
+                id: 6,
+                name: "Mighty Tower Zinger",
+                category: "burger",
+                description: "Double crispy zinger fillets with a hash brown, cheese slice, and spicy garlic sauce.",
+                image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=700&q=80",
+                badge: "Heavyweight",
+                hasSizes: false,
+                price: 720
+            },
+            {
+                id: 7,
+                name: "Loaded Pizza Fries",
+                category: "sides",
+                description: "Crispy French fries topped with melted cheese, spicy tikka chunks, jalapeños & ranch drizzle.",
+                image: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=700&q=80",
+                badge: "Must Try",
+                hasSizes: false,
+                price: 499
+            },
+            {
+                id: 8,
+                name: "Hot & Crispy Chicken Wings (8 Pcs)",
+                category: "sides",
+                description: "Golden fried spicy wings tossed in tangy buffalo or honey BBQ glaze.",
+                image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=700&q=80",
+                badge: "",
+                hasSizes: false,
+                price: 550
+            },
+            {
+                id: 9,
+                name: "Chilled Cold Drink (1.5 Liter)",
+                category: "drinks",
+                description: "Ice-cold Pepsi / 7Up / Sprite / Sting to complete your feast.",
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=700&q=80",
+                badge: "",
+                hasSizes: false,
+                price: 220
+            }
+        ];
 
-  
+        // Load Saved State from LocalStorage
+        let storeConfig = JSON.parse(localStorage.getItem('fahans_config')) || { ...DEFAULT_CONFIG };
+        let menuItems = JSON.parse(localStorage.getItem('fahans_menu')) || [ ...DEFAULT_MENU ];
+        let usersDB = JSON.parse(localStorage.getItem('fahans_users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('fahans_current_user')) || null;
+
+        let cart = [];
+        let currentCategory = 'all';
+        let selectedSizes = {};
+
+        // Initialize sizes for pizzas
+        function initPizzaSizes() {
+            menuItems.forEach(item => {
+                if (item.hasSizes && !selectedSizes[item.id]) {
+                    selectedSizes[item.id] = 'Medium';
+                }
+            });
+        }
+
+        // Apply Store Configuration to DOM
+        function applyStoreConfig() {
+            document.documentElement.style.setProperty('--brand-accent', storeConfig.accentColor);
+            document.documentElement.style.setProperty('--brand-accent-hover', storeConfig.accentHover);
+
+            document.getElementById('page-title').textContent = `${storeConfig.brandName} | Hot Pizzas, Juicy Burgers & Fast Food`;
+            document.getElementById('nav-brand-name').textContent = storeConfig.brandName;
+            document.getElementById('nav-brand-tagline').textContent = storeConfig.tagline;
+            document.getElementById('display-store-address').textContent = storeConfig.address;
+            document.getElementById('display-free-threshold').textContent = storeConfig.freeDeliveryAbove.toLocaleString();
+
+            document.querySelectorAll('.dynamic-brand-text').forEach(el => el.textContent = storeConfig.brandName);
+            document.querySelectorAll('.dynamic-phone-text').forEach(el => el.textContent = storeConfig.displayPhone);
+
+            const waGreeting = `https://wa.me/${storeConfig.whatsappNumber}?text=${encodeURIComponent(`Assalam-o-Alaikum ${storeConfig.brandName}! Mujhe order karna hai.`)}`;
+            document.getElementById('hero-wa-link').href = waGreeting;
+            document.getElementById('contact-wa-card').href = waGreeting;
+            document.getElementById('floating-wa-btn').href = waGreeting;
+        }
+
+        // ==================== MENU RENDERING & FILTERING ====================
+        function renderMenu() {
+            initPizzaSizes();
+            const grid = document.getElementById('menu-grid');
+            const searchQuery = document.getElementById('menu-search').value.toLowerCase();
+
+            const filtered = menuItems.filter(item => {
+                const matchesCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) || 
+                                      item.description.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-400">
+                        <i class="fa-solid fa-utensils text-3xl mb-3 text-gray-600"></i>
+                        <p>No food items matched your search. Try another keyword!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const activeSize = selectedSizes[item.id] || 'Medium';
+                const displayPrice = item.hasSizes ? item.prices[activeSize] : item.price;
+
+                const sizeSelectorHTML = item.hasSizes ? `
+                    <div class="flex items-center gap-1.5 mt-3 bg-brand-dark p-1 rounded-xl border border-brand-border">
+                        ${['Small', 'Medium', 'Large'].map(size => `
+                            <button onclick="selectPizzaSize(${item.id}, '${size}')" 
+                                    class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${activeSize === size ? 'bg-brand-accent text-white shadow' : 'text-gray-400 hover:text-white'}">
+                                ${size}
+                            </button>
+                        `).join('')}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="bg-brand-card border border-brand-border hover:border-brand-accent/60 rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 group shadow-lg">
+                        <div>
+                            <div class="relative h-52 overflow-hidden bg-zinc-900">
+                                <img src="${item.image}" 
+                                     onerror="this.src='https://placehold.co/600x400/16161a/ff4d00?text=${encodeURIComponent(item.name)}'"
+                                     alt="${item.name}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                ${item.badge ? `
+                                    <span class="absolute top-3 left-3 bg-brand-dark/90 backdrop-blur-md border border-brand-border text-brand-gold text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                                        ${item.badge}
+                                    </span>
+                                ` : ''}
+                            </div>
+
+                            <div class="p-5">
+                                <h3 class="text-lg font-bold text-white group-hover:text-brand-accent transition-colors">${item.name}</h3>
+                                <p class="text-xs sm:text-sm text-gray-400 mt-1.5 line-clamp-2">${item.description}</p>
+                                ${sizeSelectorHTML}
+                            </div>
+                        </div>
+
+                        <div class="px-5 pb-5 pt-2 flex items-center justify-between border-t border-brand-border/50">
+                            <div>
+                                <span class="text-[11px] text-gray-400 block">Price</span>
+                                <span class="font-display text-2xl text-brand-gold tracking-wide">Rs. ${displayPrice.toLocaleString()}</span>
+                            </div>
+                            <button onclick="addToCart(${item.id})" 
+                                    class="px-4 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all active:scale-95 shadow-md">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add to Cart</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectPizzaSize(itemId, size) {
+            selectedSizes[itemId] = size;
+            renderMenu();
+        }
+
+        function filterMenu(category) {
+            currentCategory = category;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.classList.remove('bg-brand-card', 'text-gray-300', 'border', 'border-brand-border');
+                    btn.classList.add('bg-brand-accent', 'text-white');
+                } else {
+                    btn.classList.add('bg-brand-card', 'text-gray-300', 'border', 'border-brand-border');
+                    btn.classList.remove('bg-brand-accent', 'text-white');
+                }
+            });
+            renderMenu();
+        }
+
+        // ==================== SHOPPING CART & WHATSAPP CHECKOUT ====================
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            const size = item.hasSizes ? selectedSizes[item.id] : null;
+            const price = item.hasSizes ? item.prices[size] : item.price;
+            const cartItemId = size ? `${item.id}-${size}` : `${item.id}`;
+            const displayName = size ? `${item.name} (${size})` : item.name;
+
+            const existing = cart.find(c => c.cartItemId === cartItemId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ cartItemId, name: displayName, price, image: item.image, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Added "${displayName}" to your order!`);
+        }
+
+        function addQuickDeal(dealName, dealPrice, dealImage) {
+            const cartItemId = `deal-${dealName.replace(/\s+/g, '-')}`;
+            const existing = cart.find(c => c.cartItemId === cartItemId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ cartItemId, name: dealName, price: dealPrice, image: dealImage, qty: 1 });
+            }
+            updateCartUI();
+            showToast(`Added "${dealName}" to your order!`);
+        }
+
+        function updateQuantity(cartItemId, delta) {
+            const index = cart.findIndex(c => c.cartItemId === cartItemId);
+            if (index === -1) return;
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const itemsContainer = document.getElementById('cart-items-container');
+            const formSection = document.getElementById('checkout-form-section');
+            const footer = document.getElementById('cart-footer');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            badge.textContent = totalItems;
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const threshold = storeConfig.freeDeliveryAbove;
+            const progressPct = Math.min(100, Math.round((subtotal / threshold) * 100));
+            document.getElementById('free-delivery-bar').style.width = `${progressPct}%`;
+
+            if (subtotal >= threshold) {
+                document.getElementById('free-delivery-status').innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Congrats! You unlocked FREE Delivery!</span>`;
+            } else {
+                const remaining = threshold - subtotal;
+                document.getElementById('free-delivery-status').innerHTML = `Add <strong class="text-brand-gold">Rs. ${remaining.toLocaleString()}</strong> more for FREE Delivery!`;
+            }
+
+            if (cart.length === 0) {
+                emptyMsg.classList.remove('hidden');
+                itemsContainer.classList.add('hidden');
+                formSection.classList.add('hidden');
+                footer.classList.add('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            itemsContainer.classList.remove('hidden');
+            formSection.classList.remove('hidden');
+            footer.classList.remove('hidden');
+
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between gap-3 bg-brand-dark border border-brand-border p-3 rounded-2xl">
+                    <img src="${item.image}" alt="${item.name}" class="w-14 h-14 rounded-xl object-cover shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h5 class="text-sm font-bold text-white truncate">${item.name}</h5>
+                        <p class="text-xs text-brand-gold font-semibold mt-0.5">Rs. ${(item.price * item.qty).toLocaleString()}</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-brand-card border border-brand-border rounded-xl px-2 py-1">
+                        <button onclick="updateQuantity('${item.cartItemId}', -1)" class="w-6 h-6 text-gray-400 hover:text-white flex items-center justify-center">
+                            <i class="fa-solid fa-minus text-xs"></i>
+                        </button>
+                        <span class="text-xs font-bold text-white w-4 text-center">${item.qty}</span>
+                        <button onclick="updateQuantity('${item.cartItemId}', 1)" class="w-6 h-6 text-brand-accent hover:text-white flex items-center justify-center">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            const delivery = subtotal >= threshold ? 0 : storeConfig.deliveryFee;
+            const total = subtotal + delivery;
+
+            document.getElementById('bill-subtotal').textContent = `Rs. ${subtotal.toLocaleString()}`;
+            document.getElementById('bill-delivery').textContent = delivery === 0 ? 'FREE' : `Rs. ${delivery}`;
+            document.getElementById('bill-total').textContent = `Rs. ${total.toLocaleString()}`;
+        }
+
+        function placeWhatsAppOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const payment = document.getElementById('cust-payment').value;
+
+            if (!name || !phone || !address) {
+                showToast("⚠️ Please enter your Name, Phone & Delivery Address!");
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const delivery = subtotal >= storeConfig.freeDeliveryAbove ? 0 : storeConfig.deliveryFee;
+            const total = subtotal + delivery;
+
+            let message = `*🔥 NEW ORDER - ${storeConfig.brandName} 🔥*\n\n`;
+            message += `*Customer:* ${name}\n`;
+            message += `*Phone:* ${phone}\n`;
+            message += `*Address:* ${address}\n`;
+            message += `*Payment:* ${payment}\n\n`;
+            message += `*--- ORDER ITEMS ---*\n`;
+
+            cart.forEach((item, idx) => {
+                message += `${idx + 1}. ${item.name} x${item.qty} = Rs. ${(item.price * item.qty).toLocaleString()}\n`;
+            });
+
+            message += `\n*Subtotal:* Rs. ${subtotal.toLocaleString()}`;
+            message += `\n*Delivery:* ${delivery === 0 ? 'FREE' : 'Rs. ' + delivery}`;
+            message += `\n*TOTAL BILL: Rs. ${total.toLocaleString()}*`;
+
+            // Save order to logged-in user's history if logged in
+            if (currentUser) {
+                const orderRecord = {
+                    id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                    date: new Date().toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    itemsSummary: cart.map(i => `${i.name} (x${i.qty})`).join(', '),
+                    total: total
+                };
+                currentUser.orders = currentUser.orders || [];
+                currentUser.orders.unshift(orderRecord);
+                localStorage.setItem('fahans_current_user', JSON.stringify(currentUser));
+
+                const userIdx = usersDB.findIndex(u => u.phone === currentUser.phone);
+                if (userIdx !== -1) {
+                    usersDB[userIdx] = currentUser;
+                    localStorage.setItem('fahans_users', JSON.stringify(usersDB));
+                }
+            }
+
+            const whatsappURL = `https://wa.me/${storeConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+
+            toggleCart();
+            openGenericModal(
+                `ORDER SENT TO ${storeConfig.brandName}!`,
+                `Your itemized bill has been opened in WhatsApp (${storeConfig.displayPhone}). Simply tap Send in WhatsApp and our kitchen will start preparing your meal!`
+            );
+            cart = [];
+            updateCartUI();
+        }
+
+        // ==================== CONTACT FORM LOGIC ====================
+        function submitContactForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const subject = document.getElementById('contact-subject').value;
+            const msg = document.getElementById('contact-message').value.trim();
+
+            if (!name || !phone || !msg) return;
+
+            document.getElementById('contact-form').reset();
+            openGenericModal(
+                "MESSAGE RECEIVED!",
+                `Thank you ${name}! We have received your inquiry regarding "${subject}" and will contact you at ${phone} shortly.`
+            );
+        }
+
+        function sendContactViaWhatsApp() {
+            const name = document.getElementById('contact-name').value.trim() || "Customer";
+            const phone = document.getElementById('contact-phone').value.trim() || "Not provided";
+            const subject = document.getElementById('contact-subject').value;
+            const msg = document.getElementById('contact-message').value.trim();
+
+            if (!msg) {
+                showToast("⚠️ Please write your message first!");
+                return;
+            }
+
+            const waText = `*📩 INQUIRY - ${storeConfig.brandName}*\n*Name:* ${name}\n*Phone:* ${phone}\n*Subject:* ${subject}\n*Message:* ${msg}`;
+            window.open(`https://wa.me/${storeConfig.whatsappNumber}?text=${encodeURIComponent(waText)}`, '_blank');
+        }
+
+        // ==================== CUSTOMER LOGIN / SIGN UP SYSTEM ====================
+        function updateAuthUI() {
+            const label = document.getElementById('nav-user-label');
+            const cartHint = document.getElementById('cart-login-hint');
+
+            if (currentUser) {
+                label.textContent = currentUser.name.split(' ')[0];
+                if (cartHint) cartHint.classList.add('hidden');
+                // Auto-fill checkout fields
+                document.getElementById('cust-name').value = currentUser.name || '';
+                document.getElementById('cust-phone').value = currentUser.phone || '';
+                document.getElementById('cust-address').value = currentUser.address || '';
+            } else {
+                label.textContent = 'Login';
+                if (cartHint) cartHint.classList.remove('hidden');
+            }
+        }
+
+        function openAccountModal() {
+            const modal = document.getElementById('account-modal');
+            const authView = document.getElementById('auth-forms-view');
+            const profileView = document.getElementById('user-profile-view');
+
+            if (currentUser) {
+                authView.classList.add('hidden');
+                profileView.classList.remove('hidden');
+                document.getElementById('profile-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                document.getElementById('profile-name').textContent = currentUser.name;
+                document.getElementById('profile-phone').textContent = `${currentUser.phone} ${currentUser.email ? '• ' + currentUser.email : ''}`;
+                document.getElementById('profile-address').textContent = currentUser.address;
+
+                const historyList = document.getElementById('order-history-list');
+                const orders = currentUser.orders || [];
+                if (orders.length === 0) {
+                    historyList.innerHTML = `<p class="text-xs text-gray-500 bg-brand-dark p-3 rounded-xl border border-brand-border">No past orders yet. Place your first delicious order today!</p>`;
+                } else {
+                    historyList.innerHTML = orders.map(o => `
+                        <div class="bg-brand-dark border border-brand-border p-3 rounded-xl text-xs space-y-1">
+                            <div class="flex justify-between font-bold text-white">
+                                <span>${o.id} • ${o.date}</span>
+                                <span class="text-brand-gold">Rs. ${o.total.toLocaleString()}</span>
+                            </div>
+                            <p class="text-gray-400 truncate">${o.itemsSummary}</p>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                authView.classList.remove('hidden');
+                profileView.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAccountModal() {
+            const modal = document.getElementById('account-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const loginBtn = document.getElementById('tab-login-btn');
+            const signupBtn = document.getElementById('tab-signup-btn');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                loginBtn.classList.add('bg-brand-accent', 'text-white');
+                loginBtn.classList.remove('text-gray-400');
+                signupBtn.classList.remove('bg-brand-accent', 'text-white');
+                signupBtn.classList.add('text-gray-400');
+            } else {
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                signupBtn.classList.add('bg-brand-accent', 'text-white');
+                signupBtn.classList.remove('text-gray-400');
+                loginBtn.classList.remove('bg-brand-accent', 'text-white');
+                loginBtn.classList.add('text-gray-400');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const phone = document.getElementById('signup-phone').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const address = document.getElementById('signup-address').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (usersDB.some(u => u.phone === phone)) {
+                showToast("⚠️ An account with this phone number already exists!");
+                return;
+            }
+
+            const newUser = { name, phone, email, address, password, orders: [] };
+            usersDB.push(newUser);
+            currentUser = newUser;
+
+            localStorage.setItem('fahans_users', JSON.stringify(usersDB));
+            localStorage.setItem('fahans_current_user', JSON.stringify(currentUser));
+
+            updateAuthUI();
+            closeAccountModal();
+            showToast(`🎉 Welcome to ${storeConfig.brandName}, ${name}!`);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const found = usersDB.find(u => (u.phone === identifier || u.email === identifier) && u.password === password);
+            if (!found) {
+                showToast("⚠️ Invalid phone/email or password!");
+                return;
+            }
+
+            currentUser = found;
+            localStorage.setItem('fahans_current_user', JSON.stringify(currentUser));
+            updateAuthUI();
+            closeAccountModal();
+            showToast(`👋 Welcome back, ${currentUser.name}!`);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('fahans_current_user');
+            updateAuthUI();
+            closeAccountModal();
+            showToast("Logged out successfully.");
+        }
+
+        // ==================== STORE OWNER LIVE CUSTOMIZER ====================
+        function openCustomizerAuth() {
+            document.getElementById('owner-pin-input').value = '';
+            const modal = document.getElementById('pin-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePinModal() {
+            const modal = document.getElementById('pin-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function verifyOwnerPin() {
+            const pin = document.getElementById('owner-pin-input').value.trim();
+            if (pin === '1234') {
+                closePinModal();
+                openCustomizer();
+            } else {
+                showToast("⚠️ Incorrect PIN! Default PIN is 1234.");
+            }
+        }
+
+        function openCustomizer() {
+            document.getElementById('cfg-brand-name').value = storeConfig.brandName;
+            document.getElementById('cfg-tagline').value = storeConfig.tagline;
+            document.getElementById('cfg-whatsapp').value = storeConfig.whatsappNumber;
+            document.getElementById('cfg-display-phone').value = storeConfig.displayPhone;
+            document.getElementById('cfg-delivery-fee').value = storeConfig.deliveryFee;
+            document.getElementById('cfg-free-above').value = storeConfig.freeDeliveryAbove;
+            document.getElementById('cfg-address').value = storeConfig.address;
+
+            renderAdminMenuList();
+            document.getElementById('customizer-overlay').classList.remove('hidden');
+            document.getElementById('customizer-drawer').classList.remove('-translate-x-full');
+        }
+
+        function closeCustomizer() {
+            document.getElementById('customizer-overlay').classList.add('hidden');
+            document.getElementById('customizer-drawer').classList.add('-translate-x-full');
+        }
+
+        function setThemeColor(accent, hover) {
+            storeConfig.accentColor = accent;
+            storeConfig.accentHover = hover;
+            localStorage.setItem('fahans_config', JSON.stringify(storeConfig));
+            applyStoreConfig();
+            showToast("🎨 Theme color updated!");
+        }
+
+        function saveStoreSettings() {
+            storeConfig.brandName = document.getElementById('cfg-brand-name').value.trim() || storeConfig.brandName;
+            storeConfig.tagline = document.getElementById('cfg-tagline').value.trim() || storeConfig.tagline;
+            storeConfig.whatsappNumber = document.getElementById('cfg-whatsapp').value.trim() || storeConfig.whatsappNumber;
+            storeConfig.displayPhone = document.getElementById('cfg-display-phone').value.trim() || storeConfig.displayPhone;
+            storeConfig.deliveryFee = Number(document.getElementById('cfg-delivery-fee').value) || 0;
+            storeConfig.freeDeliveryAbove = Number(document.getElementById('cfg-free-above').value) || 2000;
+            storeConfig.address = document.getElementById('cfg-address').value.trim() || storeConfig.address;
+
+            localStorage.setItem('fahans_config', JSON.stringify(storeConfig));
+            applyStoreConfig();
+            updateCartUI();
+            showToast("✅ Store settings saved!");
+        }
+
+        function addNewMenuItem() {
+            const name = document.getElementById('new-item-name').value.trim();
+            const category = document.getElementById('new-item-cat').value;
+            const price = Number(document.getElementById('new-item-price').value);
+            const description = document.getElementById('new-item-desc').value.trim() || "Freshly prepared delicious fast food item.";
+
+            if (!name || !price) {
+                showToast("⚠️ Enter item name and price!");
+                return;
+            }
+
+            const defaultImages = {
+                pizza: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
+                burger: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80",
+                sides: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=700&q=80",
+                drinks: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=700&q=80"
+            };
+
+            const newItem = {
+                id: Date.now(),
+                name,
+                category,
+                description,
+                image: defaultImages[category],
+                badge: "New",
+                hasSizes: false,
+                price
+            };
+
+            menuItems.unshift(newItem);
+            localStorage.setItem('fahans_menu', JSON.stringify(menuItems));
+            renderMenu();
+            renderAdminMenuList();
+
+            document.getElementById('new-item-name').value = '';
+            document.getElementById('new-item-price').value = '';
+            document.getElementById('new-item-desc').value = '';
+            showToast(`🍕 "${name}" added to menu!`);
+        }
+
+        function deleteMenuItem(id) {
+            menuItems = menuItems.filter(i => i.id !== id);
+            localStorage.setItem('fahans_menu', JSON.stringify(menuItems));
+            renderMenu();
+            renderAdminMenuList();
+            showToast("Item removed from menu.");
+        }
+
+        function renderAdminMenuList() {
+            const list = document.getElementById('admin-menu-list');
+            list.innerHTML = menuItems.map(item => `
+                <div class="flex items-center justify-between bg-brand-dark border border-brand-border px-3 py-2 rounded-xl text-xs">
+                    <span class="text-white font-medium truncate pr-2">${item.name}</span>
+                    <button onclick="deleteMenuItem(${item.id})" class="text-red-400 hover:text-red-300 shrink-0 px-2 py-1">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function downloadStandaloneHTML() {
+            // Inject current config & menu into downloaded HTML file so GitHub deployment keeps all changes permanently
+            let htmlContent = document.documentElement.outerHTML;
+            htmlContent = htmlContent.replace(
+                /const DEFAULT_CONFIG = \{[\s\S]*?\};/,
+                `const DEFAULT_CONFIG = ${JSON.stringify(storeConfig, null, 4)};`
+            );
+            htmlContent = htmlContent.replace(
+                /const DEFAULT_MENU = \[[\s\S]*?\];/,
+                `const DEFAULT_MENU = ${JSON.stringify(menuItems, null, 4)};`
+            );
+
+            const blob = new Blob(['<!DOCTYPE html>\n' + htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("📥 index.html downloaded! Ready for GitHub Pages.");
+        }
+
+        function resetAllStoreData() {
+            localStorage.removeItem('fahans_config');
+            localStorage.removeItem('fahans_menu');
+            storeConfig = { ...DEFAULT_CONFIG };
+            menuItems = [ ...DEFAULT_MENU ];
+            applyStoreConfig();
+            renderMenu();
+            renderAdminMenuList();
+            showToast("Store reset to default settings.");
+        }
+
+        // ==================== UI DRAWER & MODAL HELPERS ====================
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const isClosed = drawer.classList.contains('translate-x-full');
+
+            if (isClosed) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function openGenericModal(title, body) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').textContent = body;
+            const modal = document.getElementById('generic-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeGenericModal() {
+            const modal = document.getElementById('generic-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 2800);
+        }
+
+        // Initial Boot
+        window.onload = function() {
+            applyStoreConfig();
+            renderMenu();
+            updateAuthUI();
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
